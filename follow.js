@@ -2130,6 +2130,8 @@ var _id = window.location.search.includes('id') ? window.location.search.split('
 var _b, _height, b_height, _X;
 var measureFirstNote = [];
 
+console.log(window.location)
+
 $(document).ready(function () {
   if (isAndroid || isPlay == '1') {
     $('#opt .opt1').remove();
@@ -2420,7 +2422,6 @@ $(document).ready(function () {
     }, 5000)
   });
 
-  console.log(_id)
   switch (_id) {
     case '1': _getOssXml('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/01.xml');
     break;
@@ -2428,7 +2429,7 @@ $(document).ready(function () {
     break;
     case '3': _getOssXml('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/60.xml');
     break;
-    default: _getOssXml('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/01.xml');
+    default: _getOssXml('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/60.xml');
     break;
   }
 
