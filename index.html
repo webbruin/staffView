@@ -3,10 +3,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="mui.min.css">
 <style>
 .rat { width: 100%; height:100%; margin:0px; overflow: auto; }
 #body{
+  width: 100vh;
   height: 100vw;
   -ms-transform: rotate(90deg);
   -ms-transform-origin: 50vw 50vw;
@@ -25,31 +25,7 @@ body .rat{
   height: 100%;
 }
 body { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; -webkit-touch-callout: none; line-height: initial !important; }
-html, body { background-color: #fff !important; font-size: 20px; }   /* for full screen */
-@media screen and (max-width:320px) {
-    html, body { font-size: 16px; }
-}
-@media screen and (min-width:321px) and (max-width:375px) {
-    html, body { font-size: 18px; }
-}
-@media screen and (min-width:376px) and (max-width:414px) {
-    html, body { font-size: 20px; }
-}
-@media screen and (min-width:415px) and (max-width:640px) {
-    html, body { font-size: 24px; }
-}
-@media screen and (min-width:641px) and (max-width:768px) {
-    html, body { font-size: 26px; }
-}
-@media screen and (min-width:769px) and (max-width:960px) {
-    html, body { font-size: 28px; }
-}
-@media screen and (min-width:961px) and (max-width:1024px) {
-    html, body { font-size: 36px; }
-}
-@media screen and (min-width:1025px) {
-    html, body { font-size: 40px; }
-}
+html, body { background-color: #fff !important; }   /* for full screen */
 
 .box{
     display: flex;
@@ -89,9 +65,8 @@ label, input, select, #mbar { font-family: arial; font-size: 15px; }
 #notation {
   position: fixed;
   bottom: 0;
-  left: 3.5rem;
+  left: 0;
   height: calc(100% - 3.5rem);
-  width: calc(100% - 3.5rem);
   display: inline-block;
   vertical-align: top;
   -webkit-overflow-scrolling: touch;
@@ -192,396 +167,83 @@ input[type=range] { width: 100%; margin: 0px; }
   width: calc(100% / 8) !important;
 }
 
-#showToastWraper {
-  position: fixed;
-  z-index: 9999;
-  top: 35%;
-  right: 0;
-  left: 0;
-  width: 90%;
-  margin: auto;
-  background: rgba(0, 0, 0, 0.6);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f000000, endColorstr=#7f000000);
-  text-align: center;
-  padding: .5rem 1rem;
-  color: #dcdcdc;
-  border-radius: 2.5rem;
-}
-
-.helpCenter{
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 999;
-  background-color:rgba(4, 4, 15 , .5);
-  display: none;
-}
-.helpCenter aside{
-  width: 25rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-}
-.helpCenter aside .head{
-  width: 100%;
-  height: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-.helpCenter aside .head .back{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 2.5rem;
-  height: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.helpCenter aside .head .back img{
-  height: .8rem;
-}
-.helpCenter aside .head span{
-  font-size: .9rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  color: #333;
-}
-.helpCenter aside .list{
-  flex: 1;
-  padding: 0 1rem;
-  overflow-y: auto;
-}
-.helpCenter aside .list dl{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 0 .6rem 0;
-}
-.helpCenter aside .list dl dt{
-  display: flex;
-  align-items: center;
-  margin-bottom: .35rem;
-}
-.helpCenter aside .list dl dt img{
-  max-width: 1.2rem;
-  max-height: 1.2rem;
-  margin-right: 1rem;
-}
-.helpCenter aside .list dl dt span{
-  font-size: .9rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  color: #333;
-}
-.helpCenter aside .list dl dd{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 0 0 2.2rem;
-}
-.helpCenter aside .list dl dd div{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.helpCenter aside .list dl dd div strong{
-  font-size: .8rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  color: #333;
-  margin-bottom: .25rem;
-}
-.helpCenter aside .list dl dd div span{
-  font-size: .8rem;
-  font-family:PingFangSC-Regular,PingFang SC;
-  font-weight:400;
-  color: #666;
-  margin-bottom: .25rem;
-}
-.helpCenter aside .list dl dd div .indent{
-  margin-left: .65rem;
-}
-.helpCenter aside .list dl dd div span:last-of-type{
-  margin-bottom: 0;
-}
-
 .xy_staff{
-  width: 100%;
+  width: 100vh;
   height: 100vw;
   display: flex;
   flex-direction: column;
-}
-#tabbar, #opt{
-  position: fixed;
-  z-index: 99;
-}
-#tabbar, #opt .opt5{
-  display: none;
 }
 #tabbar{
   box-sizing: border-box;
   width: 100%;
   height: 3.5rem;
-  left: 0;
-  top: 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: #F9F9F9;
-  border-bottom: 1px solid #EDEDED;
-}
-#tabbar .tab-left, #tabbar .tab-right{
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-#tabbar .tab-left .icon{
-  width: 2.5rem;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#tabbar .tab-left .icon img{
-  width: .5rem;
-}
-#tabbar .tab-left p{
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-}
-#tabbar .tab-left p strong{
-  display: flex;
-  align-items: center;
-}
-#tabbar .tab-left p .date{
-  font-weight: 400;
-  font-size: .9rem;
-  color: #333;
-}
-#tabbar .tab-left p .staff-name{
-  font-size: 1rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  color: #333;
-  margin-left: 1rem;
-  width: 7rem;
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
-}
-#tabbar .tab-left p .textbook-name{
-  font-size: .75rem;
-  font-family: PingFangSC-Regular,PingFang SC;
-  font-weight: 400;
-  color: #888;
-}
-#tabbar .tab-right dl{
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: .5rem;
-  margin: 0;
-}
-#tabbar .tab-right dl dt{
-  box-sizing: content-box !important;
-  width: 1.5rem;
-  font-size: .7rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  color: #333;
-  margin: .25rem 0;
-  padding: 0 .6rem;
-  border-right: 1px solid #EDEDED;
-}
-#tabbar .tab-right dl dd{
-  box-sizing: content-box !important;
-  min-width: 7rem;
-  max-width: 9rem;
-  height: 100%;
-  margin: 0;
-  padding: 0 .6rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-#tabbar .tab-right dl dd span{
-  font-size: .8rem;
-  font-family:PingFangSC-Regular,PingFang SC;
-  font-weight:400;
-  color: #333;
-  text-align: center;
-}
-#tabbar .tab-right div{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* margin-left: 1rem; */
-  width: 2.5rem;
-}
-#tabbar .tab-right div img{
-  height: 1rem;
-  margin-bottom: .15rem;
-}
-#tabbar .tab-right div span{
-  font-size: .7rem;
-  font-family:PingFangSC-Regular,PingFang SC;
-  font-weight:400;
-  color: #333;
-}
-
-#play{
-  width: calc(100% - 3.5rem);
-  height: calc(100% - 3.5rem);
+  padding: 0 1.5rem .5rem;
+  background-image: url('icon/tabbar-bg.png');
+  background-repeat: repeat-x;
+  background-size: 100% 100%;
+  background-position: top;
   position: fixed;
-  left: 3.5rem;
-  top: 3.5rem;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  background: rgba(4, 4, 15, .2);
-}
-#play div{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  opacity: 1;
-}
-#play div p{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 2.5rem;
-}
-#play div p img{
-  width: 5rem;
-}
-#play div p span{
-  font-size: .9rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  line-height: 1.5rem;
-  color: #fff;
-}
-#play .reset{
-  width: 7rem;
-}
-#opt{
-  width: 3.5rem;
-  height: calc(100% - 3.5rem);
   left: 0;
-  bottom: 0;
+  top: 0;
+  z-index: 99;
+  visibility: hidden;
+}
+#tabbar .left{
+  /* width: 20%; */
+}
+#tabbar .right{
+  /* width: 50%; */
+}
+#tabbar div{
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  background-color: #F9F9F9;
+  justify-content: space-between;
+  align-items: flex-end;
 }
-#opt div{
-  height: 20%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* margin-bottom: .65rem; */
+#tabbar div b{
+  margin-right: 1rem;
 }
-#opt .opt0{
-  width: 100%;
-  position: relative;
+#tabbar div b:last-of-type{
+  margin-right: 0;
 }
-#opt div img{
-  width: 1.15rem;
-  margin-bottom: .1rem;
+#tabbar div b img{
+  width: 2.25rem;
+  display: block;
 }
-#opt div span, #opt div input{
-  font-size: .65rem;
-  font-family:PingFangSC-Regular,PingFang SC;
-  font-weight:400;
-  color: #333;
-  border: none;
-  -moz-appearance:none;
-  -webkit-appearance : none ;/*解决ios上按钮的圆角问题*/
-  border-radius: 0;/*解决ios上输入框圆角问题*/
-  outline:medium;/*去掉鼠标点击的默认黄色边框*/
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
-}
-#opt .progress{
-  position: absolute;
-  top: 5%;
-  right: -.2rem;
-  z-index: 300;
-  width: .2rem;
-  height: 90%;
-  background-color: #D8D8D8;
-  border-radius: 100px;
-}
-#opt .progress .bar{
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 30%;
-  background-color: #8A7EE6;
-  border-radius: 100px;
-}
-#opt .progress i{
-  font-style: normal;
-  font-size: .6rem;
-  font-family:PingFangSC-Medium,PingFang SC;
-  font-weight:500;
-  color: #333;
-  position: absolute;
-}
-#opt .progress .max{
-  top: -.5rem;
-  left: -1.2rem;
-}
-#opt .progress .min{
-  bottom: -.5rem;
-  left: -.5rem;
-}
-#opt .progress .bpm{
-  font-size: .7rem;
-  color: #8A7EE6;
-  top: -.5rem;
-  left: .5rem;
-  font-weight: 1000;
-}
-#opt .progress .dot{
-  width: 3rem;
-  height: 3rem;
-  border-radius: 100%;
-  /* background-color: #8A7EE6; */
-  background-image: url('icon/dot.png');
-  background-size: 1rem 1rem;
-  background-repeat: no-repeat;
-  background-position: center;
-  position: absolute;
-  top: calc(100% - .5rem);
-  right: -1.4rem;
-  z-index: 301;
+#tabbar div #mic img{
+  width: 2.5rem;
 }
 </style>
+
+<script src="jquery-1.11.1.min.js"></script>
+<script src="jquery.flot.min.js"></script>
+<script src="abc2svg-1.js"></script>
+<script src="xml2abc.js"></script>
+<script src="createjs.min.js"></script>
+<script src="index.js"></script>
+<!-- <script src="vconsole.min.js"></script>
+<script>
+  var vConsole = new VConsole();
+</script> -->
+<script>
+  console.log($('html').width())
+  if ($(document.body).width() <= 1024) {
+    $('html, body').css('font-size', $('html').width() / 375 * 20 + 'px');
+  } else {
+    $('html, body').css('font-size', $('html').width() / 1920 * 20 + 'px');
+  }
+  $(window).resize(function () {
+    if ($(document.body).width() <= 768) {
+      $('html, body').css('font-size', $('html').width() / 375 * 10 + 'px');
+    } else {
+      $('html, body').css('font-size', $('html').width() / 1920 * 10 + 'px');
+    }
+  });
+</script>
 </head>
-<body class="rat" id="body" style="visibility: hidden;">
+<body class="rat" id="body">
 <div id="btns" style="display:none;">
     <div id="mbar" tabindex="1">Menu</div>
     <form id="menu">
@@ -640,169 +302,18 @@ input[type=range] { width: 100%; margin: 0px; }
     </form>
 </div>
 
-<article class="helpCenter">
-  <aside>
-    <div class="head">
-      <b class="back">
-        <img src="icon/back.png" alt="">
-      </b class="back">
-      <span>帮助说明</span>
-    </div>
-    <div class="list">
-      <dl>
-        <dt>
-          <img src="icon/7.png" alt="">
-          <span>片段练习</span>
-        </dt>
-        <dd>
-          <div>
-            <strong>1.选择练习范围？</strong>
-            <span class="indent">该模式下，可以选择一个不大于8小节的范围。点击“练习”键开始识别你弹奏的音乐</span>
-          </div>
-          <div>
-            <strong>2.弹错时会发生什么？</strong>
-            <span class="indent">当你在曲谱上看到有一个“从这里开始”的三角标时，表示系统正在从那个位置开始识别</span class="indent">
-          </div>
-          <div>
-            <strong>3.系统在识别哪里？</strong>
-            <span class="indent">当你在曲谱上看到有一个“从这里开始”的三角标时，表示系统正在从那个位置开始识别</span class="indent">
-          </div>
-          <div>
-            <strong>4.如何重新选择范围</strong>
-            <span class="indent">当学会了一个片段后，可以点击“选择片段”，这样就可以重新选择范围了</span class="indent">
-          </div>
-        </dd>
-      </dl>
-      <dl>
-        <dt>
-          <img src="icon/6.png" alt="">
-          <span>记录模式</span>
-        </dt>
-        <dd>
-          <div>
-            <span>1. 这个模式下，系统不提供琴声识别功能。</span>
-            <span>2. 只要练琴时打开这个模式，你可以统计到一共练习了多长时间，以及有效在弹琴的时间长度</span>
-          </div>
-        </dd>
-      </dl>
-      <dl>
-        <dt>
-          <img src="icon/5-1.png" alt="">
-          <span>播放</span>
-        </dt>
-        <dd>
-          <div>
-            <span>1. 根据你选择的小节开始播放曲谱</span>
-            <span>2. 片段模式下，只能是选择片段内的小节开始。记录模式下可以是任何一个小节</span>
-          </div>
-        </dd>
-      </dl>
-      <dl>
-        <dt>
-          <img src="icon/4.png" alt="">
-          <span>速度设置</span>
-        </dt>
-        <dd>
-          <div>
-            <span>在播放模式下，点击速度设置，通过调整滑杆，调整播放速度</span>
-          </div>
-        </dd>
-      </dl>
-      <dl>
-        <dt>
-          <img src="icon/8.png" alt="">
-          <span>更换曲谱</span>
-        </dt>
-        <dd>
-          <div>
-            <span>当练习完毕或者想换曲子练时，可以直接点击选择新曲子</span>
-          </div>
-        </dd>
-      </dl>
-    </div>
-  </aside>
-</article>
 <section class="xy_staff">
   <div id="tabbar">
-    <div class="tab-left">
-      <b class="icon back"><img src="icon/back.png" alt=""></b>
-      <p>
-        <strong>
-          <span class="date"></span>
-          <span class="staff-name"></span>
-        </strong>
-        <strong>
-          <span class="textbook-name"></span>
-        </strong>
-      </span>
+    <div class="left">
+      <b id="back"><img src="icon/tab-back.png" alt=""></b>
+      <b id="mic"><img src="icon/tab-mic.png" alt=""></b>
     </div>
-    <div class="tab-right">
-      <dl>
-        <dt>片段练习</dt>
-        <dd class="textScrollBar">
-          <span></span>
-          <span></span>
-        </dd>
-        <dd class="practiceTime">
-          <span></span>
-          <span data-time=0></span>
-        </dd>
-      </dl>
-      <div class="match-hand opts">
-        <img src="icon/3.png" alt="">
-        <span>合手</span>
-      </div>
-      <div class="help opts">
-        <img src="icon/2.png" alt="">
-        <span>帮助</span>
-      </div>
-    </div>
-  </div>
-  <div id="play" style="display: none;">
-    <div>
-      <p class="exercise">
-        <img src="icon/9-2.png" alt="">
-        <span>练习</span>
-      </p>
-      <p class="start">
-        <img src="icon/9.png" alt="">
-        <span>播放</span>
-      </p>
-    </div>
-    <img src="icon/9-1.png" alt="" class="reset">
-  </div>
-  <div id="opt">
-    <input type="number" min="20" max="300" id="tempo" style="display: none;">
-    <div class="opt0 opts" onclick="onChangeMusic()">
-      <img src="icon/8.png" alt="">
-        <span>换曲谱</span>
-      </div>
-    <div class="opt1 opts">
-      <img src="icon/6-1.png" alt="">
-      <span>片段练习</span>
-    </div>
-    <div class="opt2 opts">
-      <img src="icon/7.png" alt="">
-      <span>记录模式</span>
-    </div>
-    <div class="opt3 opts">
-      <img src="icon/4-1.png" alt="">
-      <span>速度设置</span>
-    </div>
-    <div class="opt5 opts">
-      <img src="icon/11.png" alt="">
-      <span>选择片段</span>
-    </div>
-    <div class="opt4 opts">
-      <img src="icon/5-1.png" alt="">
-      <input type='button' id="start" value="播放">
-    </div>
-    <div class="progress" style="display: none;">
-      <span class="bar"></span>
-      <i class="max">0</i>
-      <i class="min">0</i>
-      <i class="bpm">0</i>
-      <b class="dot"></b>
+    <div class="right">
+      <b id="help"><img src="icon/tab-help.png" alt=""></b>
+      <b id="again"><img src="icon/tab-again.png" alt=""></b>
+      <b id="action"><img src="icon/tab-pause.png" alt=""></b>
+      <b id="metronome"><img src="icon/tab-metronome.png" alt=""></b>
+      <b id="share"><img src="icon/tab-share.png" alt=""></b>
     </div>
   </div>
   <div class="rat" id="notation"></div>
@@ -1040,17 +551,5 @@ input[type=range] { width: 100%; margin: 0px; }
     <line id="spk4" x1="23" y1="9" x2="17" y2="15" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
     <line id="spk5" x1="17" y1="9" x2="23" y2="15" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
 </svg>
-
 </body>
-<script src="jquery-1.11.1.min.js"></script>
-<script src="mui.min.js"></script>
-<script src="jquery.flot.min.js"></script>
-<script src="abc2svg-1.js"></script>
-<script src="xml2abc.js"></script>
-<script src="createjs.min.js"></script>
-<script src="follow.js"></script>
-<script src="vconsole.min.js"></script>
-<script>
-  var vConsole = new VConsole();
-</script>
 </html>
