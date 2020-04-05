@@ -2121,6 +2121,7 @@ function play (soudId) {
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
+  data = JSON.parse(data)
   console.log('初始化：' + data)
   $.get(ossUrl + data, {}, function (xml) {
     nd(xml) || wa();
