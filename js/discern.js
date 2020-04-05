@@ -2121,7 +2121,7 @@ function play (soudId) {
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  console.log('初始化')
+  console.log('初始化：' + data)
   $.get(ossUrl + data)
     .then(res => {
       var xml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' +
@@ -2132,6 +2132,7 @@ function passXMLData(data) {
       $('#tabbar').css('visibility', 'visible');
     })
 }
+passXMLData('599-001.xml')
 
 // 显示没弹音符，参数：下标（从0开始）
 function unknown(i) {
