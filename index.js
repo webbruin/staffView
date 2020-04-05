@@ -2085,12 +2085,12 @@ $(document).ready(function () {
 
   $("#action").click(function (e) {
     e.preventDefault();
-    APP.MICSwitch(0);
     if (playState) {
       R(1);
     } else {
       R(-1);
     }
+    APP.MICSwitch(playState ? 0 : 1);
   })
 
   $("#metronome").click(function (e) {
@@ -2139,11 +2139,41 @@ function passXMLData(data) {
 // 显示没弹音符，参数：下标（从0开始）
 function unknown(i) {
   console.warn('没弹音符：' + i)
+  var w = 10;
+  var r = staffData[i].xy[0];
+  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
+  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
+  y = y[0] - y[1] - 20;
+  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
+
+  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+    img.href.baseVal = "icon/unknown.png";
+    img.setAttribute('width', w);
+    img.setAttribute('height', w);
+    img.setAttribute('x', x);
+    img.setAttribute('y', y);
+    img.setAttribute('class', 'err');
+    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
 }
 
 // 显示正确音符，参数：下标（从0开始）
 function right(i) {
   console.warn('正确音符：' + i)
+  var w = 10;
+  var r = staffData[i].xy[0];
+  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
+  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
+  y = y[0] - y[1] - 20;
+  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
+
+  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+    img.href.baseVal = "icon/right.png";
+    img.setAttribute('width', w);
+    img.setAttribute('height', w);
+    img.setAttribute('x', x);
+    img.setAttribute('y', y);
+    img.setAttribute('class', 'err');
+    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
 }
 
 // 显示错误音符，参数：下标（从0开始）
@@ -2168,6 +2198,7 @@ function miss(i) {
 
 // 跟随模式，h5给到app下标，然后app告诉h5结果，参数：结果数组，array[0]是结果类型（1没弹，2正确，3错误），array[1]是下标
 function follow (data) {
+  data = JSON.parse(data)
   var type = data[0];
   var bit = data[1];
   switch (type) {
