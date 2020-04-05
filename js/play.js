@@ -2059,7 +2059,7 @@ $(document).ready(function () {
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
 var playState = false;
-var ossUrl = 'https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/';
+var ossUrl = 'https://qlq-test.oss-cn-beijing.aliyuncs.com/';
 
 $(document).ready(function () {
   $("#back").click(function (e) {

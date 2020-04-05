@@ -2066,7 +2066,7 @@ $(document).ready(function () {
   })
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
-var ossUrl = 'https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/';
+var ossUrl = 'https://qlq-test.oss-cn-beijing.aliyuncs.com/';
 var playState = false;
 var mode = 'follow';  // follow、wait
 
@@ -2132,7 +2132,6 @@ function passXMLData(data) {
       $('#tabbar').css('visibility', 'visible');
     })
 }
-passXMLData('599-001.xml')
 
 // 显示没弹音符，参数：下标（从0开始）
 function unknown(i) {
