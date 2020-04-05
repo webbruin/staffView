@@ -693,7 +693,7 @@ function Ya(a) {
     width: 6,
     // height: b,
     height: h + 50,
-    fill: '#72cc72'
+    fill: '#FEC854'
   });
   0 < e.hrz && 0 == Ea && (oa = 1, Bb = E.scrollLeft, requestAnimationFrame(nc));
   oc && (Za.forEach(function (a) {
@@ -855,14 +855,6 @@ function uc(a) {
 
 function J(a, b, c) {
   p += a;
-
-  if (a > 0) {
-    APP.sendFlagBit(p)
-  };
-
-  if (p == (t.length - 1)) {
-    APP.MICSwitch(1);
-  }
 
   if (playState) {
     if (p > 0) {
@@ -1926,7 +1918,7 @@ var h = {},
   Tb = {
     delay: 1,
     eenvoor: 0,
-    metro: 0,
+    metro: 1,
     keys: 0,
     mark: 1,
     twosys: 0,
@@ -2067,6 +2059,7 @@ $(document).ready(function () {
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
 var playState = false;
+var ossUrl = 'https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/';
 
 $(document).ready(function () {
   $("#back").click(function (e) {
@@ -2080,17 +2073,13 @@ $(document).ready(function () {
 
   $("#again").click(function (e) {
     e.preventDefault();
+    R(1);
     stepFlagBit(0);
   })
 
   $("#action").click(function (e) {
     e.preventDefault();
-    if (playState) {
-      R(1);
-    } else {
-      R(-1);
-    }
-    APP.MICSwitch(playState ? 0 : 1);
+    playState ? R(1) : R(-1)
   })
 
   $("#metronome").click(function (e) {
@@ -2101,14 +2090,6 @@ $(document).ready(function () {
     e.preventDefault();
     APP.share()
   })
-})
-
-$.get('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/599-001.xml').then(res => {
-  $('#notation').html('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>');
-  passXMLData(`<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-  <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">` +
-  $(res)[0].documentElement.outerHTML)
-  $('#tabbar').css('visibility', 'visible')
 })
 
 var assetPath = "mp3/";
@@ -2131,98 +2112,15 @@ function play (soudId) {
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  console.log('初始化')
-  nd(data) || wa();
-  _speed = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
-}
-
-// 显示没弹音符，参数：下标（从0开始）
-function unknown(i) {
-  console.warn('没弹音符：' + i)
-  var w = 10;
-  var r = staffData[i].xy[0];
-  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
-  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
-  y = y[0] - y[1] - 20;
-  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
-
-  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-    img.href.baseVal = "icon/unknown.png";
-    img.setAttribute('width', w);
-    img.setAttribute('height', w);
-    img.setAttribute('x', x);
-    img.setAttribute('y', y);
-    img.setAttribute('class', 'err');
-    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
-}
-
-// 显示正确音符，参数：下标（从0开始）
-function right(i) {
-  console.warn('正确音符：' + i)
-  var w = 10;
-  var r = staffData[i].xy[0];
-  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
-  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
-  y = y[0] - y[1] - 20;
-  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
-
-  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-    img.href.baseVal = "icon/right.png";
-    img.setAttribute('width', w);
-    img.setAttribute('height', w);
-    img.setAttribute('x', x);
-    img.setAttribute('y', y);
-    img.setAttribute('class', 'err');
-    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
-}
-
-// 显示错误音符，参数：下标（从0开始）
-function miss(i) {
-  console.warn('错误音符：' + i)
-  var w = 10;
-  var r = staffData[i].xy[0];
-  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
-  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
-  y = y[0] - y[1] - 20;
-  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
-
-  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-    img.href.baseVal = "icon/miss.png";
-    img.setAttribute('width', w);
-    img.setAttribute('height', w);
-    img.setAttribute('x', x);
-    img.setAttribute('y', y);
-    img.setAttribute('class', 'err');
-    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
-}
-
-// 跟随模式，h5给到app下标，然后app告诉h5结果，参数：结果数组，array[0]是结果类型（1没弹，2正确，3错误），array[1]是下标
-function follow (data) {
-  data = JSON.parse(data)
-  var type = data[0];
-  var bit = data[1];
-  switch (type) {
-    case 1: unknown(bit);
-    break;
-    case 2: right(bit);
-    break;
-    case 3: miss(bit);
-    break;
-  }
-}
-
-// 报告，参数：分数
-function report (data) {
-  console.warn('报告数据：' + data);
-}
-
-// app给到h5对或错h5开始移动，参数：true、false /0、1
-var bit = 0;
-function move (bool) {
-  if (!bool) return;
-  bit++;
-  fa = p = Number(staffData[bit].index);
-  J(0);
+  $.get(ossUrl + data)
+    .then(res => {
+      var xml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' +
+                '<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">' +
+                $(res)[0].documentElement.outerHTML;
+      nd(xml) || wa();
+      L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
+      $('#tabbar').css('visibility', 'visible');
+    })
 }
 
 // 移动到指定的位置，参数：下标
@@ -2244,46 +2142,6 @@ var APP = {
     } catch (err) { }
     try {
       window.AJSInterface.goBack()
-    } catch (err) { }
-  },
-  // 麦克风开关，传参：0 打开，1 关闭
-  MICSwitch: function (type) {
-    console.log(type == 1 ? '关闭' : '打开')
-    try {
-      webkit.messageHandlers.MICSwitch.postMessage(type);
-    } catch (err) { }
-    try {
-      window.AJSInterface.MICSwitch(type)
-    } catch (err) { }
-  },
-  // 发送标志位，传参：数字，当前走到的标志位
-  sendFlagBit: function (index) {
-    console.log(index)
-    try {
-      webkit.messageHandlers.sendFlagBit.postMessage(index)
-    } catch (err) { }
-    try {
-      window.AJSInterface.sendFlagBit(index)
-    } catch (err) { }
-  },
-  // 换曲子，无传参
-  demand: function () {
-    console.warn('切换曲子')
-    try {
-      webkit.messageHandlers.demand.postMessage(null)
-    } catch (err) { }
-    try {
-      window.AJSInterface.demand()
-    } catch (err) { }
-  },
-  // 分享，参数待定
-  share: function () {
-    console.warn('分享')
-    try {
-      webkit.messageHandlers.share.postMessage(null)
-    } catch (err) { }
-    try {
-      window.AJSInterface.share()
     } catch (err) { }
   }
 }
