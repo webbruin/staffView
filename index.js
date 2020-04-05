@@ -2103,7 +2103,7 @@ $(document).ready(function () {
   })
 })
 
-$.get('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/01.xml').then(res => {
+$.get('https://oss-qlq-file.oss-cn-hangzhou.aliyuncs.com/599-001.xml').then(res => {
   $('#notation').html('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>');
   passXMLData(`<?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">` +
@@ -2131,7 +2131,7 @@ function play (soudId) {
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  console.log('初始化xml')
+  console.log('初始化')
   nd(data) || wa();
   _speed = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
 }
@@ -2143,6 +2143,7 @@ function miss(i) {
   var r = staffData[i].xy[0];
   var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
   var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
+  y = y[0] - y[1] - 20;
   if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
 
   var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
@@ -2150,11 +2151,26 @@ function miss(i) {
     img.setAttribute('width', w);
     img.setAttribute('height', w);
     img.setAttribute('x', x);
-    img.setAttribute('y', y[0] - y[1] - 20);
+    img.setAttribute('y', y);
     img.setAttribute('class', 'err');
     $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
 }
 
+// 报告，参数：分数
+function report (data) {
+  console.warn('报告数据：' + data);
+}
+
+// app给到h5对或错h5开始移动，参数：true、false /0、1
+var bit = 0;
+function move (bool) {
+  if (!bool) return;
+  bit++;
+  fa = p = Number(staffData[bit].index);
+  J(0);
+}
+
+// 移动到指定的位置，参数：下标
 function stepFlagBit(i) {
   if (staffData[i]) {
     fa = p = Number(staffData[i].index);
