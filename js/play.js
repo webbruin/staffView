@@ -2113,15 +2113,11 @@ function play (soudId) {
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
   console.log('初始化：' + data)
-  $.get(ossUrl + data)
-    .then(res => {
-      var xml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' +
-                '<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">' +
-                $(res)[0].documentElement.outerHTML;
-      nd(xml) || wa();
-      L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
-      $('#tabbar').css('visibility', 'visible');
-    })
+  $.get(ossUrl + data, {}, function (xml) {
+    nd(xml) || wa();
+    L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
+    $('#tabbar').css('visibility', 'visible');
+  }, 'text')
 }
 
 // 移动到指定的位置，参数：下标
