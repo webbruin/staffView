@@ -2120,7 +2120,6 @@ function passXMLData(data) {
     $('#tabbar').css('visibility', 'visible');
   }, 'text')
 }
-passXMLData('299-01.xml')
 
 // 移动到指定的位置，参数：下标
 function stepFlagBit(i) {
