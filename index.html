@@ -216,17 +216,16 @@ input[type=range] { width: 100%; margin: 0px; }
   width: 2.5rem;
 }
 </style>
-
+<script src="vconsole.min.js"></script>
+<script>
+  var vConsole = new VConsole();
+</script>
 <script src="jquery-1.11.1.min.js"></script>
 <script src="jquery.flot.min.js"></script>
 <script src="abc2svg-1.js"></script>
 <script src="xml2abc.js"></script>
 <script src="createjs.min.js"></script>
 <script src="index.js"></script>
-<!-- <script src="vconsole.min.js"></script>
-<script>
-  var vConsole = new VConsole();
-</script> -->
 <script>
   if ($(document.body).width() <= 1024) {
     $('html, body').css('font-size', $('html').width() / 375 * 20 + 'px');
