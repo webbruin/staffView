@@ -2136,6 +2136,16 @@ function passXMLData(data) {
   _speed = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
 }
 
+// 显示没弹音符，参数：下标（从0开始）
+function unknown(i) {
+  console.warn('没弹音符：' + i)
+}
+
+// 显示正确音符，参数：下标（从0开始）
+function right(i) {
+  console.warn('正确音符：' + i)
+}
+
 // 显示错误音符，参数：下标（从0开始）
 function miss(i) {
   console.warn('错误音符：' + i)
@@ -2154,6 +2164,20 @@ function miss(i) {
     img.setAttribute('y', y);
     img.setAttribute('class', 'err');
     $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
+}
+
+// 跟随模式，h5给到app下标，然后app告诉h5结果，参数：结果数组，array[0]是结果类型（1没弹，2正确，3错误），array[1]是下标
+function follow (data) {
+  var type = data[0];
+  var bit = data[1];
+  switch (type) {
+    case 1: unknown(bit);
+    break;
+    case 2: right(bit);
+    break;
+    case 3: miss(bit);
+    break;
+  }
 }
 
 // 报告，参数：分数
