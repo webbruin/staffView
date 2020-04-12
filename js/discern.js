@@ -2086,6 +2086,7 @@ $(document).ready(function () {
       mode = 'follow';
       $("#action").show();
     }
+    APP.changeMode(mode);
     $(this).find('img').attr('src', `icon/mode-${mode}.png`);
 
   })
@@ -2129,7 +2130,7 @@ function passXMLData(data) {
     $('#tabbar').css('visibility', 'visible');
   }, 'text')
 }
-passXMLData('01_向前进.xml')
+passXMLData('01-xqj.xml')
 
 // 显示没弹音符，参数：下标（从0开始）
 function unknown(i) {
@@ -2263,12 +2264,22 @@ var APP = {
   },
   // 换曲子，无传参
   demand: function () {
-    console.warn('切换曲子')
+    console.log('切换曲子')
     try {
       webkit.messageHandlers.demand.postMessage(null)
     } catch (err) { }
     try {
       window.AJSInterface.demand()
+    } catch (err) { }
+  },
+  // 换模式，传参：'follow' 跟随，'wait' 等待
+  changeMode: function (type) {
+    console.log('切换模式：', type)
+    try {
+      webkit.messageHandlers.changeMode.postMessage(type)
+    } catch (err) { }
+    try {
+      window.AJSInterface.changeMode(type)
     } catch (err) { }
   }
 }
