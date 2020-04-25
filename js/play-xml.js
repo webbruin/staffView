@@ -2059,11 +2059,9 @@ $(document).ready(function () {
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
 var playState = false;
+var ossUrl = 'https://qlq-test.oss-cn-beijing.aliyuncs.com/';
 
 $(document).ready(function () {
-  // 页面准备完成，然后告诉app初始化xml
-  APP.initXML()
-
   $("#back").click(function (e) {
     e.preventDefault();
     APP.goBack();
@@ -2114,10 +2112,13 @@ function play (soudId) {
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  nd(data) || wa();
-  L.value = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
-  $('#tabbar').css('visibility', 'visible');
+  $.get(ossUrl + data, {}, function (xml) {
+    nd(xml) || wa();
+    L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
+    $('#tabbar').css('visibility', 'visible');
+  }, 'text')
 }
+passXMLData('599-001.xml')
 
 // 移动到指定的位置，参数：下标
 function stepFlagBit(i) {
@@ -2130,16 +2131,6 @@ function stepFlagBit(i) {
 }
 
 var APP = {
-  // xml初始化，h5告诉app，可以传xml给h5了
-  initXML: function () {
-    console.log('初始化')
-    try {
-      webkit.messageHandlers.initXML.postMessage(null)
-    } catch (err) { }
-    try {
-      window.AJSInterface.initXML()
-    } catch (err) { }
-  },
   // 练习页返回，无传参
   goBack: function () {
     console.log('返回')

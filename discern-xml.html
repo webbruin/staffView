@@ -85,7 +85,7 @@ label, input, select, #mbar { font-family: arial; font-size: 15px; }
   width: 100vh;
   height: 100vw;
   z-index:2;
-  color:#FFA254;
+  color:rgb(254, 200, 84);
   background: rgba(4,4,15,0.2);
   z-index: 200;
 }
@@ -180,7 +180,7 @@ input[type=range] { width: 100%; margin: 0px; }
   display: flex;
   justify-content: space-between;
   padding: 0 1.5rem .5rem;
-  background-image: url('icon/tabbar-bg-play.png');
+  background-image: url('icon/tabbar-bg-discern.png');
   background-repeat: repeat-x;
   background-size: 100% 100%;
   background-position: top;
@@ -215,6 +215,15 @@ input[type=range] { width: 100%; margin: 0px; }
 #tabbar div #mic img{
   width: 2.25rem;
 }
+#tabbar div #mode img{
+  width: 6rem;
+}
+#tabbar div #action{
+  margin-right: 0;
+}
+#tabbar div #again{
+  display: none;
+}
 </style>
 <script src="js/vconsole.min.js"></script>
 <script>
@@ -225,7 +234,7 @@ input[type=range] { width: 100%; margin: 0px; }
 <script src="js/abc2svg-1.js"></script>
 <script src="js/xml2abc.js"></script>
 <script src="js/createjs.min.js"></script>
-<script src="js/play.js"></script>
+<script src="js/discern-xml.js"></script>
 <script>
   if ($(document.body).width() <= 1024) {
     $('html, body').css('font-size', $('html').width() / 375 * 20 + 'px');
@@ -304,14 +313,13 @@ input[type=range] { width: 100%; margin: 0px; }
   <div id="tabbar">
     <div class="left">
       <b id="back"><img src="icon/tab-back.png" alt=""></b>
-      <b id="mic"><img src="icon/tab-mic.png" alt=""></b>
+      <b id="mic"><img src="icon/tab-discern.png" alt=""></b>
+      <b id="mode"><img src="icon/mode-follow.png" alt=""></b>
     </div>
     <div class="right">
       <b id="help"><img src="icon/tab-help.png" alt=""></b>
-      <b id="metronome"><img src="icon/tab-metronome.png" alt=""></b>
-      <b id="again"><img src="icon/tab-again.png" alt=""></b>
       <b id="action"><img src="icon/tab-pause.png" alt=""></b>
-      <b id="share"><img src="icon/tab-share.png" alt=""></b>
+      <b id="again"><img src="icon/tab-again.png" alt=""></b>
     </div>
   </div>
   <div class="rat" id="notation"></div>

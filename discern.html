@@ -25,7 +25,7 @@ body .rat{
   height: 100%;
 }
 body { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; -webkit-touch-callout: none; line-height: initial !important; }
-html, body { background-color: #fff !important; }   /* for full screen */
+html, body { background-color: #fff !important; font-size: 20px; }   /* for full screen */
 
 .box{
     display: flex;
@@ -85,7 +85,7 @@ label, input, select, #mbar { font-family: arial; font-size: 15px; }
   width: 100vh;
   height: 100vw;
   z-index:2;
-  color:#FFA254;
+  color:rgb(254, 200, 84);
   background: rgba(4,4,15,0.2);
   z-index: 200;
 }
@@ -213,10 +213,16 @@ input[type=range] { width: 100%; margin: 0px; }
   display: block;
 }
 #tabbar div #mic img{
-  width: 2.5rem;
+  width: 2.25rem;
 }
 #tabbar div #mode img{
   width: 6rem;
+}
+#tabbar div #action{
+  margin-right: 0;
+}
+#tabbar div #again{
+  display: none;
 }
 </style>
 <script src="js/vconsole.min.js"></script>
@@ -224,11 +230,6 @@ input[type=range] { width: 100%; margin: 0px; }
   var vConsole = new VConsole();
 </script>
 <script src="js/jquery-1.11.1.min.js"></script>
-<script src="js/jquery.flot.min.js"></script>
-<script src="js/abc2svg-1.js"></script>
-<script src="js/xml2abc.js"></script>
-<script src="js/createjs.min.js"></script>
-<script src="js/discern.js"></script>
 <script>
   if ($(document.body).width() <= 1024) {
     $('html, body').css('font-size', $('html').width() / 375 * 20 + 'px');
@@ -243,6 +244,11 @@ input[type=range] { width: 100%; margin: 0px; }
     }
   });
 </script>
+<script src="js/jquery.flot.min.js"></script>
+<script src="js/abc2svg-1.js"></script>
+<script src="js/xml2abc.js"></script>
+<script src="js/createjs.min.js"></script>
+<script src="js/discern.js"></script>
 </head>
 <body class="rat" id="body">
 <div id="btns" style="display:none;">
@@ -311,8 +317,9 @@ input[type=range] { width: 100%; margin: 0px; }
       <b id="mode"><img src="icon/mode-follow.png" alt=""></b>
     </div>
     <div class="right">
-      <b id="action"><img src="icon/tab-pause.png" alt=""></b>
       <b id="help"><img src="icon/tab-help.png" alt=""></b>
+      <b id="action"><img src="icon/tab-pause.png" alt=""></b>
+      <b id="again"><img src="icon/tab-again.png" alt=""></b>
     </div>
   </div>
   <div class="rat" id="notation"></div>

@@ -856,13 +856,14 @@ function uc(a) {
 function J(a, b, c) {
   p += a;
 
-  if (playState) {
-    if (p > 0) {
-      var playAudio = t[p - 1].pbk.map(function (i) {return i.mn > 0 ? i.mn - 20 : 0}).filter(function (i) {return i > 0});;
-      playAudio.map(function (i) {return play(i)})
-    }
+  if (a > 0) {
+    APP.sendFlagBit(p)
+  };
+
+  if (p == (t.length - 1)) {
+    APP.MICSwitch(1);
   }
-  
+
   if (p + 1 >= t.length) {
     R(0)
     p = 0;
@@ -936,13 +937,10 @@ function Jb() {
   clearTimeout(xc);
 }
 
-var countdown = 0;
+var countdown = 3;
 function R(a) {
   if (t.length) {
     if (a >= 0) {
-      /* if (p >= staffData.filter(function (i) {return i.pbk}).length) {
-        fa = p = 0
-      } */
       zc(), Ha = 0, Jb(), Z = -1, cancelAnimationFrame(Ea), Ea = Ab = 0;
       $('#action img').attr('src', 'icon/tab-pause.png');
     } else {
@@ -1093,7 +1091,7 @@ function Pb() {
   Sb = 3E4 / L.value;
   clearTimeout(hb);
   hb = setTimeout(Fc, Sb);
-  0 < O && (--O, $("#countin").html(/* "<b>" + O + "</b>" */), 1 == O && (Z = Y()), 0 == O && ($("#countin").toggle(!1), ba = e.metro, Kb = Z = Y(), fb ? (fb = 0, Ha = 1, U && w.play(), J(0, 0, 1)) : $("#eenvoor").prop("checked") ? J(0, 1) : (Lb = 0, U && w.play(), t[p].ptc[-1] && J(1))))
+  0 < O && (--O, $("#countin").html("<b>" + O + "</b>"), 1 == O && (Z = Y()), 0 == O && ($("#countin").toggle(!1), ba = e.metro, Kb = Z = Y(), fb ? (fb = 0, Ha = 1, U && w.play(), J(0, 0, 1)) : $("#eenvoor").prop("checked") ? J(0, 1) : (Lb = 0, U && w.play(), t[p].ptc[-1] && J(1))))
 }
 function gc(a, b) {
   for (var c = atob(a), d = new ArrayBuffer(c.length), g = new Uint8Array(d), e = 0; e < c.length; e++) g[e] = c.charCodeAt(e);
@@ -1918,7 +1916,7 @@ var h = {},
   Tb = {
     delay: 1,
     eenvoor: 0,
-    metro: 1,
+    metro: 0,
     keys: 0,
     mark: 1,
     twosys: 0,
@@ -2058,39 +2056,47 @@ $(document).ready(function () {
   })
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
+var ossUrl = 'https://qlq-test.oss-cn-beijing.aliyuncs.com/';
 var playState = false;
+var mode = 'follow';  // follow、wait
 
 $(document).ready(function () {
-  // 页面准备完成，然后告诉app初始化xml
-  APP.initXML()
-
   $("#back").click(function (e) {
     e.preventDefault();
     APP.goBack();
+  })
+
+  $("#mode").click(function (e) {
+    e.preventDefault();
+    if (mode == 'follow') {
+      mode = 'wait';
+      $("#action").hide();
+      $("#again").show();
+      R(1);
+    } else {
+      mode = 'follow';
+      $("#action").show();
+      $("#again").hide();
+    }
+    stepFlagBit(0);
+    APP.changeMode(mode);
+    $(this).find('img').attr('src', `icon/mode-${mode}.png`);
   })
 
   $("#help").click(function (e) {
     e.preventDefault();
   })
 
+  $("#action").click(function (e) {
+    e.preventDefault();
+    playState ? R(1) : R(-1)
+    APP.MICSwitch(playState ? 0 : 1);
+  })
+
   $("#again").click(function (e) {
     e.preventDefault();
     R(1);
     stepFlagBit(0);
-  })
-
-  $("#action").click(function (e) {
-    e.preventDefault();
-    playState ? R(1) : R(-1)
-  })
-
-  $("#metronome").click(function (e) {
-    e.preventDefault();
-  })
-
-  $("#share").click(function (e) {
-    e.preventDefault();
-    APP.share()
   })
 })
 
@@ -2105,18 +2111,103 @@ function soundFun () {
 }
 soundFun()
 
-var instance;
-function play (soudId) {
-  instance = createjs.Sound.createInstance('mp3-' + soudId)
-  instance.on('complete', function () {})
-  instance.play()
-}
-
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  nd(data) || wa();
-  L.value = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
-  $('#tabbar').css('visibility', 'visible');
+  $.get(ossUrl + data, {}, function (xml) {
+    nd(xml) || wa();
+    L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
+    $('#tabbar').css('visibility', 'visible');
+  }, 'text')
+}
+passXMLData('599-001.xml')
+
+// 显示没弹音符，参数：下标（从0开始）
+function unknown(i) {
+  console.warn('没弹音符：' + i)
+  var w = 10;
+  var r = staffData[i].xy[0];
+  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
+  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
+  y = y[0] - y[1] - 30;
+  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
+
+  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+    img.href.baseVal = "icon/unknown.png";
+    img.setAttribute('width', w);
+    img.setAttribute('height', w);
+    img.setAttribute('x', x);
+    img.setAttribute('y', y);
+    img.setAttribute('class', 'err');
+    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
+}
+
+// 显示正确音符，参数：下标（从0开始）
+function right(i) {
+  console.warn('正确音符：' + i)
+  var w = 10;
+  var r = staffData[i].xy[0];
+  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
+  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
+  y = y[0] - y[1] - 30;
+  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
+
+  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+    img.href.baseVal = "icon/right.png";
+    img.setAttribute('width', w);
+    img.setAttribute('height', w);
+    img.setAttribute('x', x);
+    img.setAttribute('y', y);
+    img.setAttribute('class', 'err');
+    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
+}
+
+// 显示错误音符，参数：下标（从0开始）
+function miss(i) {
+  console.warn('错误音符：' + i)
+  var w = 15;
+  var r = staffData[i].xy[0];
+  var x = Number(staffData[i].xy[1]) + (Number(staffData[i].xy[3]) - w) / 2;
+  var y = $('.g').eq(staffData[i].xy[0]).find('.stroke').attr('d').split(' ')[1].split('v-');
+  y = y[0] - y[1] - 30;
+  if ($(`#notation svg .err[x='${x}'][y='${y}'][width='${w}'][r='${r}']`).length > 0) return;
+
+  var img = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+    img.href.baseVal = "icon/miss.png";
+    img.setAttribute('width', w);
+    img.setAttribute('height', w);
+    img.setAttribute('x', x);
+    img.setAttribute('y', y);
+    img.setAttribute('class', 'err');
+    $('#notation svg').eq(staffData[i].xy[0]).find('.g').append(img);
+}
+
+// 跟随模式，h5给到app下标，然后app告诉h5结果，参数：结果数组，array[0]是结果类型（1没弹，2正确，3错误），array[1]是下标
+function follow (data) {
+  data = JSON.parse(data)
+  var type = data[0];
+  var bit = data[1];
+  switch (type) {
+    case 1: unknown(bit);
+    break;
+    case 2: right(bit);
+    break;
+    case 3: miss(bit);
+    break;
+  }
+}
+
+// 报告，参数：分数
+function report (data) {
+  console.warn('报告数据：' + data);
+}
+
+// app给到h5对或错h5开始移动，参数：true、false /0、1
+var bit = 0;
+function move (bool) {
+  if (!bool) return;
+  bit++;
+  fa = p = Number(staffData[bit].index);
+  J(0);
 }
 
 // 移动到指定的位置，参数：下标
@@ -2130,16 +2221,6 @@ function stepFlagBit(i) {
 }
 
 var APP = {
-  // xml初始化，h5告诉app，可以传xml给h5了
-  initXML: function () {
-    console.log('初始化')
-    try {
-      webkit.messageHandlers.initXML.postMessage(null)
-    } catch (err) { }
-    try {
-      window.AJSInterface.initXML()
-    } catch (err) { }
-  },
   // 练习页返回，无传参
   goBack: function () {
     console.log('返回')
@@ -2148,6 +2229,46 @@ var APP = {
     } catch (err) { }
     try {
       window.AJSInterface.goBack()
+    } catch (err) { }
+  },
+  // 麦克风开关，传参：0 打开，1 关闭
+  MICSwitch: function (type) {
+    console.log(type == 1 ? '关闭' : '打开')
+    try {
+      webkit.messageHandlers.MICSwitch.postMessage(type);
+    } catch (err) { }
+    try {
+      window.AJSInterface.MICSwitch(type)
+    } catch (err) { }
+  },
+  // 发送标志位，传参：数字，当前走到的标志位
+  sendFlagBit: function (index) {
+    console.log(index)
+    try {
+      webkit.messageHandlers.sendFlagBit.postMessage(index)
+    } catch (err) { }
+    try {
+      window.AJSInterface.sendFlagBit(index)
+    } catch (err) { }
+  },
+  // 换曲子，无传参
+  demand: function () {
+    console.log('切换曲子')
+    try {
+      webkit.messageHandlers.demand.postMessage(null)
+    } catch (err) { }
+    try {
+      window.AJSInterface.demand()
+    } catch (err) { }
+  },
+  // 换模式，传参：'follow' 跟随，'wait' 等待
+  changeMode: function (type) {
+    console.log('切换模式：', type)
+    try {
+      webkit.messageHandlers.changeMode.postMessage(type)
+    } catch (err) { }
+    try {
+      window.AJSInterface.changeMode(type)
     } catch (err) { }
   }
 }

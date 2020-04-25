@@ -864,13 +864,6 @@ function J(a, b, c) {
     APP.MICSwitch(1);
   }
 
-  if (playState) {
-    if (p > 0) {
-      var playAudio = t[p - 1].pbk.map(function (i) {return i.mn > 0 ? i.mn - 20 : 0}).filter(function (i) {return i > 0});;
-      playAudio.map(function (i) {return play(i)})
-    }
-  }
-  
   if (p + 1 >= t.length) {
     R(0)
     p = 0;
@@ -2066,11 +2059,13 @@ $(document).ready(function () {
   })
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
-var ossUrl = 'https://qlq-test.oss-cn-beijing.aliyuncs.com/';
 var playState = false;
 var mode = 'follow';  // follow、wait
 
 $(document).ready(function () {
+  // 页面准备完成，然后告诉app初始化xml
+  APP.initXML()
+
   $("#back").click(function (e) {
     e.preventDefault();
     APP.goBack();
@@ -2081,10 +2076,12 @@ $(document).ready(function () {
     if (mode == 'follow') {
       mode = 'wait';
       $("#action").hide();
+      $("#again").show();
       R(1);
     } else {
       mode = 'follow';
       $("#action").show();
+      $("#again").hide();
     }
     APP.changeMode(mode);
     $(this).find('img').attr('src', `icon/mode-${mode}.png`);
@@ -2113,24 +2110,12 @@ function soundFun () {
 }
 soundFun()
 
-var instance;
-function play (soudId) {
-  instance = createjs.Sound.createInstance('mp3-' + soudId)
-  instance.on('complete', function () {})
-  instance.play()
-}
-
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  // data = JSON.parse(data)
-  console.log('初始化：' + data)
-  $.get(ossUrl + data, {}, function (xml) {
-    nd(xml) || wa();
-    L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
-    $('#tabbar').css('visibility', 'visible');
-  }, 'text')
+  nd(data) || wa();
+  L.value = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
+  $('#tabbar').css('visibility', 'visible');
 }
-passXMLData('01-xqj.xml')
 
 // 显示没弹音符，参数：下标（从0开始）
 function unknown(i) {
@@ -2232,6 +2217,16 @@ function stepFlagBit(i) {
 }
 
 var APP = {
+  // xml初始化，h5告诉app，可以传xml给h5了
+  initXML: function () {
+    console.log('初始化')
+    try {
+      webkit.messageHandlers.initXML.postMessage(null)
+    } catch (err) { }
+    try {
+      window.AJSInterface.initXML()
+    } catch (err) { }
+  },
   // 练习页返回，无传参
   goBack: function () {
     console.log('返回')
