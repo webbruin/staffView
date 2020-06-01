@@ -2047,7 +2047,12 @@ $(document).ready(function () {
   Ub();
   va = 1;
   Ic();
-  "requestMIDIAccess" in navigator ? navigator.requestMIDIAccess().then(jd, kd) : ($("#notation").append('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>'), q('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>'));
+  if ("requestMIDIAccess" in navigator) {
+    navigator.requestMIDIAccess().then(jd, kd)
+  } else {
+    // $("#notation").append('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>')
+    // q('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>')
+  }
   $("#ble").prop("disabled", !("bluetooth" in navigator));
   td();
   36 > $("#info").height() && (a = $("body").height(), ja());
@@ -2059,10 +2064,18 @@ $(document).ready(function () {
 })
 /* ------------------------------------------------------------------------------------------------------------------- */
 var playState = false;
+let ossUrl = 'https://xml-music.oss-cn-beijing.aliyuncs.com/'
+let params = getParams()
 
 $(document).ready(function () {
-  // 页面准备完成，然后告诉app初始化xml
-  APP.initXML()
+  let progress = $('.progress');
+  let bar = $('.progress .bar');
+  let dot = $('.progress .dot');
+  let bpm = $('.progress .bpm');
+  let pw = progress.width()
+  let bw = dot.width() / 2;
+  let bx = dot.offset().left;
+  let speed = 60
 
   $("#back").click(function (e) {
     e.preventDefault();
@@ -2071,6 +2084,17 @@ $(document).ready(function () {
 
   $("#help").click(function (e) {
     e.preventDefault();
+    $('#faq').show()
+    $('#progressBar').removeClass('show')
+  })
+
+  $('#faq').click(function (e) {
+    e.preventDefault();
+    $(this).hide()
+  })
+
+  $('#faq dl').click(function(e) {
+    e.stopPropagation()
   })
 
   $("#again").click(function (e) {
@@ -2086,12 +2110,36 @@ $(document).ready(function () {
 
   $("#metronome").click(function (e) {
     e.preventDefault();
+    $('#progressBar').toggleClass('show')
+    rootSize = $('html').css('font-size').split('px')[0];
+    bpm.text(speed);
+    dot.css({ left: speed / 300 * pw - (rootSize * .35) + 'px' });
+    bar.css({ width: speed / 300 * pw - bw + 'px' });
   })
+
+  dot.on('touchstart', function (e) {
+    $(this).on('touchmove', function (e) {
+      let startX = e.originalEvent.targetTouches[0].pageX;
+      let distanceX = startX - bx;
+      if (pw - distanceX + bw > 0 && pw - distanceX + bw < pw) {
+        $(this).css('left', distanceX - (rootSize * .35) + 'px');
+        bar.css('width', distanceX - bw + 'px');
+        bpm.text(Math.ceil((pw - (pw - distanceX + bw)) / pw * 300));
+        $('#tempo').val(bpm.text());
+      }
+    })
+  })
+  dot.on('touchend', function () {
+    $(this).off('touchmove');
+  })
+
 
   $("#share").click(function (e) {
     e.preventDefault();
     APP.share()
   })
+
+  passXMLData(params.name)
 })
 
 var assetPath = "mp3/";
@@ -2114,9 +2162,14 @@ function play (soudId) {
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  nd(data) || wa();
-  L.value = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
-  $('#tabbar').css('visibility', 'visible');
+  if (!data) return
+  $.get(ossUrl + data, {}, function (xml) {
+    nd(xml) || wa();
+    let title = $(xml).find("work>work-title").text().trim() || $(xml).find("movement-title").text().trim() || params.name.replace('.xml', '') || ''
+    $('#notation').prepend(`<p style="text-align: center; margin: 20px 0 0 0;">${title}</p>`)
+    L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
+    $('#tabbar').css('visibility', 'visible');
+  }, 'text')
 }
 
 // 移动到指定的位置，参数：下标
@@ -2129,12 +2182,21 @@ function stepFlagBit(i) {
   J(0);
 }
 
+function getParams() {
+  const params = {}
+  location.search.slice(1).split("&").forEach((kv) => {
+      const [key, value] = kv.split("=")
+      params[key] = decodeURI(value)
+  })
+  return params
+}
+
 var APP = {
   // xml初始化，h5告诉app，可以传xml给h5了
   initXML: function () {
     console.log('初始化')
     try {
-      webkit.messageHandlers.initXML.postMessage(null)
+      webkit.messageHandlers.initXML.postMessage(0)
     } catch (err) { }
     try {
       window.AJSInterface.initXML()
@@ -2144,7 +2206,7 @@ var APP = {
   goBack: function () {
     console.log('返回')
     try {
-      webkit.messageHandlers.goBack.postMessage(null)
+      webkit.messageHandlers.goBack.postMessage(0)
     } catch (err) { }
     try {
       window.AJSInterface.goBack()

@@ -2048,7 +2048,12 @@ $(document).ready(function () {
   Ub();
   va = 1;
   Ic();
-  "requestMIDIAccess" in navigator ? navigator.requestMIDIAccess().then(jd, kd) : ($("#notation").append('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>'), q('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>'));
+  if ("requestMIDIAccess" in navigator) {
+    navigator.requestMIDIAccess().then(jd, kd)
+  } else {
+    // $("#notation").append('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>')
+    // q('<div class="box"><img src="./icon/loading.gif" /><p>loading...</p></div>')
+  }
   $("#ble").prop("disabled", !("bluetooth" in navigator));
   td();
   36 > $("#info").height() && (a = $("body").height(), ja());
@@ -2061,11 +2066,10 @@ $(document).ready(function () {
 /* ------------------------------------------------------------------------------------------------------------------- */
 var playState = false;
 var mode = 'follow';  // follow、wait
+let ossUrl = 'https://xml-music.oss-cn-beijing.aliyuncs.com/'
+let params = getParams()
 
 $(document).ready(function () {
-  // 页面准备完成，然后告诉app初始化xml
-  APP.initXML()
-
   $("#back").click(function (e) {
     e.preventDefault();
     APP.goBack();
@@ -2090,6 +2094,16 @@ $(document).ready(function () {
 
   $("#help").click(function (e) {
     e.preventDefault();
+    $('#faq').show()
+  })
+
+  $('#faq').click(function (e) {
+    e.preventDefault();
+    $(this).hide()
+  })
+
+  $('#faq dl').click(function(e) {
+    e.stopPropagation()
   })
 
   $("#action").click(function (e) {
@@ -2097,6 +2111,8 @@ $(document).ready(function () {
     playState ? R(1) : R(-1)
     APP.MICSwitch(playState ? 0 : 1);
   })
+
+  passXMLData(params.name)
 })
 
 var assetPath = "mp3/";
@@ -2112,9 +2128,13 @@ soundFun()
 
 // 初始化xml，参数：字符串形式的xml
 function passXMLData(data) {
-  nd(data) || wa();
-  L.value = $(data).find('measure').eq(0).find('sound').attr('tempo') || 60;
-  $('#tabbar').css('visibility', 'visible');
+  $.get(ossUrl + data, {}, function (xml) {
+    nd(xml) || wa();
+    let title = $(xml).find("work>work-title").text().trim() || $(xml).find("movement-title").text().trim() || params.name.replace('.xml', '') || ''
+    $('#notation').prepend(`<p style="text-align: center; margin: 20px 0 0 0;">${title}</p>`)
+    L.value = $(xml).find('measure').eq(0).find('sound').attr('tempo') || 60;
+    $('#tabbar').css('visibility', 'visible');
+  }, 'text')
 }
 
 // 显示没弹音符，参数：下标（从0开始）
@@ -2197,10 +2217,10 @@ function report (data) {
   console.warn('报告数据：' + data);
 }
 
-// app给到h5对或错h5开始移动，参数：true、false /0、1
+// app给到h5对或错h5开始移动，参数：true、false /1、0
 var bit = 0;
 function move (bool) {
-  if (!bool) return;
+  if (!bool || bool == '0' || bool == 0) return;
   bit++;
   fa = p = Number(staffData[bit].index);
   J(0);
@@ -2216,12 +2236,21 @@ function stepFlagBit(i) {
   J(0);
 }
 
+function getParams() {
+  const params = {}
+  location.search.slice(1).split("&").forEach((kv) => {
+      const [key, value] = kv.split("=")
+      params[key] = decodeURI(value)
+  })
+  return params
+}
+
 var APP = {
   // xml初始化，h5告诉app，可以传xml给h5了
   initXML: function () {
     console.log('初始化')
     try {
-      webkit.messageHandlers.initXML.postMessage(null)
+      webkit.messageHandlers.initXML.postMessage(0)
     } catch (err) { }
     try {
       window.AJSInterface.initXML()
@@ -2231,7 +2260,7 @@ var APP = {
   goBack: function () {
     console.log('返回')
     try {
-      webkit.messageHandlers.goBack.postMessage(null)
+      webkit.messageHandlers.goBack.postMessage(0)
     } catch (err) { }
     try {
       window.AJSInterface.goBack()
@@ -2261,7 +2290,7 @@ var APP = {
   demand: function () {
     console.log('切换曲子')
     try {
-      webkit.messageHandlers.demand.postMessage(null)
+      webkit.messageHandlers.demand.postMessage(0)
     } catch (err) { }
     try {
       window.AJSInterface.demand()

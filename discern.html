@@ -4,9 +4,14 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <style>
+html{
+  font-size: 20px;
+}
 .rat { width: 100%; height:100%; margin:0px; overflow: auto; }
 #body{
-  width: 100vh;
+  width: 100%;
+  height: 100%;
+  /* width: 100vh;
   height: 100vw;
   -ms-transform: rotate(90deg);
   -ms-transform-origin: 50vw 50vw;
@@ -17,7 +22,7 @@
   -o-transform: rotate(90deg);
   -o-transform-origin: 50vw 50vw;
   transform: rotate(90deg);
-  transform-origin: 50vw 50vw;
+  transform-origin: 50vw 50vw; */
   /* overflow: initial !important; */
 }
 body .rat{
@@ -25,7 +30,7 @@ body .rat{
   height: 100%;
 }
 body { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; -webkit-touch-callout: none; line-height: initial !important; }
-html, body { background-color: #fff !important; font-size: 20px; }   /* for full screen */
+html, body { background-color: #fff !important; }   /* for full screen */
 
 .box{
     display: flex;
@@ -66,8 +71,9 @@ label, input, select, #mbar { font-family: arial; font-size: 15px; }
   position: fixed;
   bottom: 0;
   left: 0;
-  height: calc(100% - 3.5rem);
+  height: 100%;
   display: inline-block;
+  padding-top: 1.75rem;
   vertical-align: top;
   -webkit-overflow-scrolling: touch;
   -moz-overflow-scrolling: touch;
@@ -168,22 +174,25 @@ input[type=range] { width: 100%; margin: 0px; }
 }
 
 .xy_staff{
-  width: 100vh;
-  height: 100vw;
+  width: 100%;
+  height: 100%;
+  /* width: 100vh;
+  height: 100vw; */
   display: flex;
   flex-direction: column;
 }
 #tabbar{
   box-sizing: border-box;
   width: 100%;
-  height: 3.5rem;
+  height: 1.75rem;
   display: flex;
   justify-content: space-between;
-  padding: 0 1.5rem .5rem;
+  padding: 0 .75rem .25rem;
   background-image: url('icon/tabbar-bg-discern.png');
   background-repeat: repeat-x;
   background-size: 100% 100%;
   background-position: top;
+  background-color: #1B63B5;
   position: fixed;
   left: 0;
   top: 0;
@@ -203,26 +212,135 @@ input[type=range] { width: 100%; margin: 0px; }
   align-items: flex-end;
 }
 #tabbar div b{
-  margin-right: 1rem;
+  margin-right: .5rem;
 }
 #tabbar div b:last-of-type{
   margin-right: 0;
 }
 #tabbar div b img{
-  width: 2.25rem;
+  width: 1.125rem;
   display: block;
 }
 #tabbar div #mic img{
-  width: 2.25rem;
+  width: 1.125rem;
 }
 #tabbar div #mode img{
-  width: 6rem;
+  width: 3rem;
 }
 #tabbar div #action{
   margin-right: 0;
 }
 #tabbar div #again{
   display: none;
+}
+#faq{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  background-color: rgba(0,0,0,0.4);
+  display: none;
+}
+#faq *{
+  margin: 0;
+  padding: 0;
+}
+#faq dl{
+  box-sizing: border-box;
+  padding: .6rem 1rem;
+  width: 65%;
+  height: 100%;
+  color: #A2670A;
+  background-color: #fff;
+  overflow-y: auto;
+}
+#faq dl dt{
+  font-size: .5rem;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: .5rem;
+}
+#faq dl dd{
+  display: flex;
+  flex-direction: column;
+}
+#faq dl dd h3{
+  font-size: .45rem;
+  margin-bottom: .2rem;
+  text-align: center;
+}
+#faq dl dd p{
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: .1rem;
+}
+#faq dl dd p::before{
+  content: '';
+  box-sizing: border-box;
+  width: .15rem;
+  height: .15rem;
+  border-radius: 100%;
+  background-color: #A2670A;
+  margin-top: .25rem;
+  margin-right: .3rem;
+}
+#faq dl dd p span{
+  flex: 1;
+  font-size: .4rem;
+  line-height: .6rem;
+  text-align: justify;
+}
+#loading{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  background: linear-gradient(to bottom, rgb(255, 252, 207) 50%, rgb(77, 181, 154) 50%);
+}
+#loading div{
+  width: 100%;
+  height: 100%;
+  background-image: url(./icon/loading-bg.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center center;
+}
+#loading div nav{
+  width: 80%;
+  height: .5rem;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 100rem;
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+  overflow: hidden;
+}
+#loading div nav b{
+  width: 0%;
+  height: 100%;
+  border-radius: 100rem;
+  background-color: #FBBB00;
+  animation: progress-active 100s linear infinite;
+}
+@keyframes progress-active {
+  0% {
+    width: 30%;
+  }
+  2% {
+    width: 90%;
+  }
+  20% {
+    width: 95%;
+  }
+  100% {
+    width: 90%;
+  }
 }
 </style>
 <script src="js/vconsole.min.js"></script>
@@ -231,16 +349,19 @@ input[type=range] { width: 100%; margin: 0px; }
 </script>
 <script src="js/jquery-1.11.1.min.js"></script>
 <script>
-  if ($(document.body).width() <= 1024) {
-    $('html, body').css('font-size', $('html').width() / 375 * 20 + 'px');
-  } else {
-    $('html, body').css('font-size', $('html').width() / 1920 * 20 + 'px');
-  }
-  $(window).resize(function () {
-    if ($(document.body).width() <= 768) {
-      $('html, body').css('font-size', $('html').width() / 375 * 10 + 'px');
+  $(window).ready(function () {
+    if ($(document.body).width() <= 1024) {
+      $('html').css('font-size', $('html').width() / 375 * 20 + 'px');
     } else {
-      $('html, body').css('font-size', $('html').width() / 1920 * 10 + 'px');
+      $('html').css('font-size', $('html').width() / 1024 * 50 + 'px');
+    }
+  })
+
+  $(window).resize(function () {
+    if ($(document.body).width() <= 1024) {
+      $('html').css('font-size', $('html').width() / 375 * 20 + 'px');
+    } else {
+      $('html').css('font-size', $('html').width() / 1024 * 50 + 'px');
     }
   });
 </script>
@@ -322,7 +443,37 @@ input[type=range] { width: 100%; margin: 0px; }
       <b id="again"><img src="icon/tab-again.png" alt=""></b>
     </div>
   </div>
-  <div class="rat" id="notation"></div>
+  <div class="rat" id="notation">
+    <div id="loading">
+      <div>
+        <nav>
+          <b></b>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div id="faq">
+    <dl>
+      <dt>常见问题</dt>
+      <dd>
+        <h3>智能识别模式里，我弹对了，屏幕指针不走？</h3>
+        <p>
+          <span>确定是否打开了开始按钮，软件才会正式开始检测哦</span>
+        </p>
+        <p>
+          <span>
+            确定已经点击了“开始按钮” 指针仍然不动，建议弹奏的声音和力度加大一些，由于设备性能的差异，声音小会检测不到哦
+          </span>
+        </p>
+        <p>
+          <span>确认已经弹奏的很响了，指针还是保持不动，可能是长时间未给钢琴调律，导致琴音不准，建议请调律师为钢琴调律。</span>
+        </p>
+        <p>
+          <span>如果才给钢琴跳过律/电子钢琴 弹奏很响仍然不能通过，请返回点击 “我的反馈”，留下您的联系方式，我们将尽快跟您联系和解决问题。</span>
+        </p>
+      </dd>
+    </dl>
+  </div>
 </section>
 
 <div class="rat" id="info" style="display: none">
